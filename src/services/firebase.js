@@ -16,7 +16,7 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 
-// ✅ NEW: Firestore save function
+// ✅ Firestore save function
 export const savePitchToFirestore = async (userId, userInput, geminiResponse) => {
   try {
     const docRef = await addDoc(collection(db, "pitches"), {

@@ -1,7 +1,7 @@
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import ResultCard from "../components/ResultCard";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { getGeminiResponse } from "../services/geminiAPI";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../services/firebase";
@@ -13,7 +13,17 @@ export default function Dashboard() {
   const [output, setOutput] = useState("");
   const [loading, setLoading] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [userName, setUserName] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const user = auth.currentUser;
+    if (user) {
+      // DisplayName check karo, agar nahi hai toh email ka first part use karo
+      const name = user.displayName || (user.email ? user.email.split('@')[0] : "User");
+      setUserName(name);
+    }
+  }, []);
 
   const handleGenerate = async () => {
     if (!text.trim()) return;
@@ -70,7 +80,7 @@ export default function Dashboard() {
         {/* Dashboard Content */}
         <main className="flex-1 p-4 md:p-8 pt-20 md:pt-24 overflow-y-auto">
           <h1 className="text-2xl md:text-3xl font-bold text-indigo-400 mb-6">
-            Welcome back, <span className="text-white">Umer!</span>
+            Welcome back, <span className="text-white">{userName}!</span>
           </h1>
 
           {/* New Idea Section */}
